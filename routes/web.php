@@ -13,10 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//@TODO sudeti route
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
+
+Route::get('/admin', function () {
+    return view('admin/home');
+})->middleware('auth');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'is_admin'], function () {
+    Route::resource('users', 'UserController');
+    Route::resource('statuses', 'StatusController');
+    Route::resource('tasks', 'TaskController');
+});

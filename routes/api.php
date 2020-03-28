@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('tasks', 'Api\V1\TaskController@index')->name('api.front.tasks');
+Route::get('statuses', 'Api\V1\StatusController@index')->name('api.front.statuses');
+
+
+
