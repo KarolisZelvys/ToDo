@@ -23,6 +23,7 @@ Vue.component('front-page', require('./components/FrontComponent.vue').default);
 Vue.component('category', require('./components/Front/Category.vue').default);
 Vue.component('task-status', require('./components/Front/TaskStatus.vue').default);
 Vue.component('tasks', require('./components/Front/Tasks.vue').default);
+Vue.component('edit-task', require('./components/Front/EditTask.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

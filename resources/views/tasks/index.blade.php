@@ -12,6 +12,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">User</th>
+                    <th scope="col">Due date</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                 </tr>
@@ -22,6 +23,7 @@
                         <th scope="row"> {{ $task->id }}</th>
                         <td> {{ $task->name }}</td>
                         <td> {{ $task->user->name }}</td>
+                        <td> {{ $task->due_date }}</td>
                         <td> {{ $task->status->name }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('tasks.edit', $task->id) }}">Edit</a>

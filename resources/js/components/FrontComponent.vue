@@ -1,34 +1,26 @@
 <template>
     <div class="container" :class="{ 'loading': loading }">
-        <div class="row" v-if="!loading">
-            <div class="row col-12 mb-4">
-                <task-status
-                    v-for="status in statuses"
-                    :key="status.id"
-                    :status="status"
-                    :selected-category="selectedCategory"
-                    @load-products="loadTasks"
-                ></task-status>
-            </div>
-            <div class="col-12">
-                <div class="list-group">
-                    <tasks
-                        v-for="task in tasks"
-                        :key="task.id"
-                        :task="task"
-                        @load-products=""
-                    ></tasks>
-                </div>
+        <div class="row mb-4" v-if="!loading">
+            <task-status
+                v-for="status in statuses"
+                :key="status.id"
+                :status="status"
+                :selected-status="selectedStatus"
+                @load-tasks="changeStatus"
+            ></task-status>
+        </div>
 
-            </div>
-<!--            <div class="col-lg-9">-->
-<!--                <div class="row mt-4">-->
-<!--                    <product v-for="product in products" :key="product.id" :product="product"></product>-->
-<!--                </div>-->
-<!--                <div class="row">-->
-<!--                    <the-pagination :pagination-data="paginationData" @change-page="changePage"></the-pagination>-->
-<!--                </div>-->
-<!--            </div>-->
+        <div class="text-right" @click="changeSorting()">Sort by: Due date</div>
+
+        <div id="accordion" v-if="!loading">
+            <tasks
+                v-for="task in tasks"
+                :key="task.id"
+                :task="task"
+                :statuses="statuses"
+                @load-task="loadTask(task.id)"
+                @changeStatus="changeTaskStatus"
+            ></tasks>
         </div>
     </div>
 </template>
@@ -39,27 +31,55 @@
             return {
                 statuses: [],
                 tasks: [],
-                // products: [],
-                // paginationData: {},
-                selectedCategory: null,
+                editTask: false,
+                selectedStatus: null,
                 currentPage: 1,
-                loading: true
+                loading: true,
+                sortingCode: 'asc',
             };
         },
         mounted () {
             this.loadTasks();
             this.loadStatuses();
-            // this.loadProducts();
         },
         methods: {
-            loadTasks: function () {
-                axios.get('/api/tasks')
+            changeStatus: function (status) {
+
+                if (this.selectedStatus === status) {
+                    this.selectedStatus = null;
+                } else {
+                    this.selectedStatus = status;
+                }
+
+                this.loadTasks();
+            },
+            changeSorting:function () {
+
+                if (this.sortingCode === 'desc') {
+                    this.sortingCode = 'asc';
+                } else {
+                    this.sortingCode = 'desc';
+                }
+
+                this.loadTasks();
+            },
+            loadTasks: function (status = this.selectedStatus, sorting = this.sortingCode) {
+                this.loading = true;
+                this.selectedStatus = status;
+
+                axios.get('/api/tasks', {
+                    params: {
+                        status,
+                        sorting
+                    }
+                })
                     .then((response) => {
                         this.tasks = response.data.data;
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
+                this.loading = false;
             },
             loadStatuses: function () {
                 this.loading = true;
@@ -72,30 +92,22 @@
                     });
                 this.loading = false;
             },
-            // loadProducts: function (category = null, page = 1) {
-            //     this.loading = true;
-            //     this.selectedCategory = category;
-            //     this.currentPage = page;
-            //     axios.get('/api/products', {
-            //         params: {
-            //             category,
-            //             page
-            //         }
-            //     })
-            //         .then((response) => {
-            //             const {data, ...pagination} = response.data;
-            //             this.products = data;
-            //             this.paginationData = pagination;
-            //             this.loading = false;
-            //         })
-            //         .catch(function (error) {
-            //             console.log(error);
-            //         });
-            // },
-            // changePage: function (page) {
-            //     console.log('asdasd');
-            //     this.loadProducts(this.selectedCategory, page);
-            // }
+            changeTaskStatus: function(val) {
+                this.loading = true;
+                const {taskId, statusId} = val;
+                axios.get('/api/taskStatusUpdate', {
+                    params: {
+                        taskId,
+                        statusId
+                    }
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+                this.loadTasks();
+                this.loading = false;
+            },
         }
     }
 </script>

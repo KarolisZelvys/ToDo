@@ -18,7 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login', 'Api\V1\UserController@login');
+Route::post('register', 'Api\V1\UserController@register');
+
 Route::get('tasks', 'Api\V1\TaskController@index')->name('api.front.tasks');
+Route::get('taskStatusUpdate', 'Api\V1\TaskController@statusUpdate');
 Route::get('statuses', 'Api\V1\StatusController@index')->name('api.front.statuses');
 
 

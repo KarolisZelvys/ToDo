@@ -39,6 +39,8 @@ class StatusController extends Controller
     {
         Status::create([
             'name' => $request->name,
+            'color' => $request->color,
+            'order' => $request->order,
         ]);
 
         return redirect()->route('statuses.index');
@@ -80,6 +82,8 @@ class StatusController extends Controller
         $status = Status::findorfail($id);
         $status->update([
             'name' => $request->name,
+            'color' => $request->color,
+            'order' => $request->order,
         ]);
 
         return redirect()->route('statuses.index');

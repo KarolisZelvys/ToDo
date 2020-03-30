@@ -45,6 +45,7 @@ class TaskController extends Controller
         Task::create([
             'name' => $request->name,
             'description' => $request->description,
+            'due_date' => $request->due_date,
             'status_id' => $request->status_id,
             'user_id' => $request->user_id,
         ]);
@@ -91,6 +92,7 @@ class TaskController extends Controller
         $task->update([
             'name' => $request->name,
             'description' => $request->description,
+            'due_date' => $request->due_date,
             'status_id' => $request->status_id,
             'user_id' => $request->user_id,
         ]);

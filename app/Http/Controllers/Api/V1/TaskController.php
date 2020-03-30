@@ -5,18 +5,25 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Admin\TaskResource;
 use App\Task;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-//        $user = Auth::findOrFail(8);
-//        $tasks = $user->task()->get();
-
-        dd(\Auth::guard('web')->user());
+        $tasks = Task::when(request()->input('status'), function ($query) {
+            $query->where('status_id', request()->input('status'));
+        })->orderBy('due_date', request()->input('sorting'))->get();
 
         return new TaskResource($tasks);
+    }
+
+    public function statusUpdate()
+    {
+        $task = Task::findOrFail(request()->input('taskId'));
+        $task->update([
+            'status_id' => request()->input('statusId'),
+        ]);
+
+        return response()->json(['success' => 'success'], 200);
     }
 }

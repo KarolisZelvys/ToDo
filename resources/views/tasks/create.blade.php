@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <form action="{{ route('tasks.store') }}" method="POST">
+            <form action="{{ route('tasks.store') }}" method="POST" class="col-12">
                 @csrf
 
                 Name:
@@ -12,9 +12,9 @@
 
                 Description:
                 <br />
-                <textarea name="description"></textarea>
-                <br />
-                Status:
+                <textarea name="description" class="form-control"></textarea>
+
+                User:
                 <br />
                 <select name="user_id" class="form-control">
                     @foreach($users as $user)
@@ -22,7 +22,10 @@
                     @endforeach
                 </select>
 
+                Due date:
                 <br />
+                <input type="date" name="due_date" class="form-control" />
+
                 Status:
                 <br />
                 <select name="status_id" class="form-control">

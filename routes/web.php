@@ -21,7 +21,7 @@ Route::get('/', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::get('/admin', function () {
     return view('admin/home');
-})->middleware('auth');
+})->name('admin.home')->middleware('is_admin');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'is_admin'], function () {
     Route::resource('users', 'UserController');

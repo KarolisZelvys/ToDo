@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+            <form action="{{ route('tasks.update', $task->id) }}" method="POST" class="col-12">
                 @method('PUT')
                 @csrf
 
@@ -13,8 +13,8 @@
 
                 Description:
                 <br />
-                <textarea name="description">{{ $task->description }}</textarea>
-                <br />
+                <textarea name="description" class="form-control">{{ $task->description }}</textarea>
+
                 User:
                 <br />
                 <select name="user_id" class="form-control">
@@ -22,7 +22,10 @@
                         <option value="{{ $user->id }}" @if ($user->id == $task->user_id) selected @endif>{{ $user->name }}</option>
                     @endforeach
                 </select>
-                <br />
+
+                Due date:
+                <input type="date" name="due_date" value="{{ $task->due_date }}" class="form-control" />
+
                 Status:
                 <br />
                 <select name="status_id" class="form-control">
